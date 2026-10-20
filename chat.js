@@ -106,7 +106,6 @@ function setupDragAndDrop() {
             e.preventDefault();
             el.classList.remove("drag-over");
 
-            // 3. Get the room name we dragged
             const roomName = e.dataTransfer.getData("text/plain");
             if (roomName) {
                 assignRoomToSlot(roomName, slot.id, el);
@@ -126,8 +125,6 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
     const header = slotElement.querySelector(".slot-header");
     header.textContent = `Room: ${joinedRoom.name}`;
     
-    const messagesArea = slotElement.querySelector(".slot-messages");
-    messagesArea.innerHTML = `<p><em>Joined ${joinedRoom.name}</em></p>`;
 
     // Subscrbe to messagees
         // We can subscribe to messages.
@@ -140,11 +137,13 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
     // We can also subscribe to notifications of clients joining the room
     activeSlots[slotId].onJoin((room, nickname) => {
        console.log(`${nickname} joined ${room.name}`);
+       displayJoinLeaveInSlot(slotId, `${nickname} joined ${room.name}`);
     });
 
     // ... and leaving the room
     activeSlots[slotId].onLeave((room, nickname) => {
         console.log(`${nickname} left ${room.name}`);
+        displayJoinLeaveInSlot(slotId, `${nickname} left ${room.name}`);
     });
 
     // Also to get a notification if the connection to the server is lost
@@ -182,6 +181,11 @@ function displayMessageInSlot(slotId, message) {
     const slotElement = document.getElementById(`slot-${slotId}`);
     const messagesArea = slotElement.querySelector(".slot-messages");
     messagesArea.innerHTML += `<p>${message}</p>`;
+}
+function displayJoinLeaveInSlot(slotId, message) {
+    const slotElement = document.getElementById(`slot-${slotId}`);
+    const messagesArea = slotElement.querySelector(".slot-messages");
+    messagesArea.innerHTML += `<p><em>${message}</em></p>`;
 }
 
 setupDragAndDrop();

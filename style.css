@@ -61,8 +61,42 @@ body {
 .slot {
     flex: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     border-right: 1px solid black;
+}
+
+.slot-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.slot-participants {
+    width: 150px;
+    border-left: 1px solid black;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.slot-participants h3 {
+    margin: 0;
+    padding: 10px 5px;
+    font-size: 14px;
+    text-align: center;
+    border-bottom: 1px solid black;
+}
+
+.participant-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.participant-list li {
+    padding: 5px 10px;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
 }
 
 .slot-header {
