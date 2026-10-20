@@ -134,6 +134,7 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
     // Note that the callback function has two parameters: the room and the message.
     activeSlots[slotId].onMessage((room, msg) => {
         console.log(`${room.name} - ${msg.sender}: ${msg.message}`);
+        displayMessageInSlot(slotId, `${msg.sender}: ${msg.message}`);
     });
 
     // We can also subscribe to notifications of clients joining the room
@@ -176,5 +177,11 @@ btnSend2.addEventListener("click", () => {
         input.value = "";
     }
 });
+
+function displayMessageInSlot(slotId, message) {
+    const slotElement = document.getElementById(`slot-${slotId}`);
+    const messagesArea = slotElement.querySelector(".slot-messages");
+    messagesArea.innerHTML += `<p>${message}</p>`;
+}
 
 setupDragAndDrop();
