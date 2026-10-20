@@ -1,7 +1,10 @@
 let wt = new WarpTalk("wss", "warp.cs.au.dk/talk/");
 const btnLoginOut = document.querySelector(".login-out-btn");
+const btnSend1 = document.getElementById("slot1-submit");
+const btnSend2 = document.getElementById("slot2-submit");
 
 console.log("Connecting to the WarpTalk server ...");
+
 
 // We will first check to see if we already are logged in with a registered nickname
 // This will ask the server, so we have to wait for a response. We do this with a callback function.
@@ -26,38 +29,10 @@ function connected() {
 
     updateRoomList();
 
-    // Let's join a room. We'll take the first one in the list. That's 'General'.
-    let room = wt.join(wt.availableRooms[0].name);
-
-    // We can now use the room object to send a message to that room.
-    room.send("Hello, room!");
-
-    // We can subscribe to messages.
-    // Note that the callback function has two parameters: the room and the message.
-    room.onMessage((room, msg) => {
-        console.log(`${room.name} - ${msg.sender}: ${msg.message}`);
-    });
-
-    // We can also subscribe to notifications of clients joining the room
-    room.onJoin((room, nickname) => {
-       console.log(`${nickname} joined ${room.name}`);
-    });
-
-    // ... and leaving the room
-    room.onLeave((room, nickname) => {
-        console.log(`${nickname} left ${room.name}`);
-    });
-
-    // Also to get a notification if the connection to the server is lost
-    // The client will automatically try to reconnect
-    room.onDisconnect((room) => {
-       console.log(`Connection to server lost`);
-    });
-
     // These two lines puts the functions on the global window object so
     // so they can be called from the JavaScript console
     window.send = function(msg) {
-        room.send(msg);
+        activeSlots[1].send(msg);
     };
     window.login = function(username, password) {
         wt.login(username, password);
@@ -67,7 +42,6 @@ function connected() {
     }
 };
 
-// ------ Loading functions for the ui ---
 const activeSlots = {
     1: null,
     2: null
@@ -85,12 +59,12 @@ function updateRoomList() {
         nameSpan.textContent = room.name;
         li.appendChild(nameSpan);
 
-        if (activeSlots[1] === room.name) {
+        if (activeSlots[1] && activeSlots[1].name === room.name) {
             const ind = document.createElement("span");
             ind.className = "slot-indicator";
             ind.textContent = "1";
             li.appendChild(ind);
-        } else if (activeSlots[2] === room.name) {
+        } else if (activeSlots[2] && activeSlots[2].name === room.name) {
             const ind = document.createElement("span");
             ind.className = "slot-indicator";
             ind.textContent = "2";
@@ -143,9 +117,10 @@ function setupDragAndDrop() {
 
 function assignRoomToSlot(roomName, slotId, slotElement) {
     
-    activeSlots[slotId] = roomName;
-    
     const joinedRoom = wt.join(roomName);
+
+    activeSlots[slotId] = joinedRoom;
+
     console.log(`Assigned ${joinedRoom.name} to Slot ${slotId}`);
 
     const header = slotElement.querySelector(".slot-header");
@@ -154,8 +129,52 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
     const messagesArea = slotElement.querySelector(".slot-messages");
     messagesArea.innerHTML = `<p><em>Joined ${joinedRoom.name}</em></p>`;
 
+    // Subscrbe to messagees
+        // We can subscribe to messages.
+    // Note that the callback function has two parameters: the room and the message.
+    activeSlots[slotId].onMessage((room, msg) => {
+        console.log(`${room.name} - ${msg.sender}: ${msg.message}`);
+    });
+
+    // We can also subscribe to notifications of clients joining the room
+    activeSlots[slotId].onJoin((room, nickname) => {
+       console.log(`${nickname} joined ${room.name}`);
+    });
+
+    // ... and leaving the room
+    activeSlots[slotId].onLeave((room, nickname) => {
+        console.log(`${nickname} left ${room.name}`);
+    });
+
+    // Also to get a notification if the connection to the server is lost
+    // The client will automatically try to reconnect
+    activeSlots[slotId].onDisconnect((room) => {
+       console.log(`Connection to server lost`);
+    });
+
+
     updateRoomList();
 }
 
+// ----- Message manipulation functions -----
+
+
+btnSend1.addEventListener("click", () => {
+    const input = document.querySelector(".slot1-input");
+    const message = input.value.trim();
+    if (message && activeSlots[1]) {
+        activeSlots[1].send(message);
+        input.value = "";
+    }
+});
+
+btnSend2.addEventListener("click", () => {
+    const input = document.querySelector(".slot2-input");
+    const message = input.value.trim();
+    if (message && activeSlots[2]) {
+        activeSlots[2].send(message);
+        input.value = "";
+    }
+});
+
 setupDragAndDrop();
-wt.onAvailableRoomsChanged(updateRoomList);
