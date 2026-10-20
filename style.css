@@ -30,8 +30,8 @@ body {
 
 
 .slot.drag-over {
-    background-color: #f0f8ff; /* Light highlight when dragging over */
-    border: 2px dashed #007bff;
+    background-color: #8f9396;
+    border: 2px dashed #333;
 }
 
 .room-list li {
@@ -46,7 +46,6 @@ body {
     cursor: grabbing;
 }
 
-/* The 1 or 2 indicator next to the room name */
 .slot-indicator {
     background-color: #333;
     color: white;

@@ -68,20 +68,94 @@ function connected() {
 };
 
 // ------ Loading functions for the ui ---
+const activeSlots = {
+    1: null,
+    2: null
+};
+
+// ------ Loading functions for the ui ---
 function updateRoomList() {
     const roomList = document.querySelector(".room-list");
     roomList.innerHTML = "";
 
     wt.availableRooms.forEach(room => {
         const li = document.createElement("li");
-        li.textContent = room.name;
+        
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = room.name;
+        li.appendChild(nameSpan);
+
+        if (activeSlots[1] === room.name) {
+            const ind = document.createElement("span");
+            ind.className = "slot-indicator";
+            ind.textContent = "1";
+            li.appendChild(ind);
+        } else if (activeSlots[2] === room.name) {
+            const ind = document.createElement("span");
+            ind.className = "slot-indicator";
+            ind.textContent = "2";
+            li.appendChild(ind);
+        }
+
+        li.setAttribute("draggable", "true");
+
+        li.addEventListener("dragstart", (e) => {
+            e.dataTransfer.setData("text/plain", room.name);
+            e.dataTransfer.effectAllowed = "move";
+        });
+
         roomList.appendChild(li);
-        li.addEventListener("click", () => {
-            const joinedRoom = wt.join(room.name);
-            console.log(`Joined room: ${joinedRoom.name}`);
+    });
+}
+
+// ------ Drag and Drop Setup ----
+function setupDragAndDrop() {
+    const slots = [
+        { id: 1, element: document.getElementById("slot-1") },
+        { id: 2, element: document.getElementById("slot-2") }
+    ];
+
+    slots.forEach(slot => {
+        const el = slot.element;
+
+        el.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = "move";
+            el.classList.add("drag-over");
+        });
+
+        el.addEventListener("dragleave", () => {
+            el.classList.remove("drag-over");
+        });
+
+        el.addEventListener("drop", (e) => {
+            e.preventDefault();
+            el.classList.remove("drag-over");
+
+            // 3. Get the room name we dragged
+            const roomName = e.dataTransfer.getData("text/plain");
+            if (roomName) {
+                assignRoomToSlot(roomName, slot.id, el);
+            }
         });
     });
 }
 
-// Update the room list when the available rooms change
+function assignRoomToSlot(roomName, slotId, slotElement) {
+    
+    activeSlots[slotId] = roomName;
+    
+    const joinedRoom = wt.join(roomName);
+    console.log(`Assigned ${joinedRoom.name} to Slot ${slotId}`);
+
+    const header = slotElement.querySelector(".slot-header");
+    header.textContent = `Room: ${joinedRoom.name}`;
+    
+    const messagesArea = slotElement.querySelector(".slot-messages");
+    messagesArea.innerHTML = `<p><em>Joined ${joinedRoom.name}</em></p>`;
+
+    updateRoomList();
+}
+
+setupDragAndDrop();
 wt.onAvailableRoomsChanged(updateRoomList);
