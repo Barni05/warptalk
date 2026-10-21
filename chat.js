@@ -8,14 +8,14 @@ console.log("Connecting to the WarpTalk server ...");
 
 // We will first check to see if we already are logged in with a registered nickname
 // This will ask the server, so we have to wait for a response. We do this with a callback function.
-wt.isLoggedIn(function(isLoggedIn) {
+wt.isLoggedIn(function (isLoggedIn) {
     if (isLoggedIn) { // If we are already logged in we can call connect that we also give a function to call when the connection has been established
         wt.connect(connected);
         btnLoginOut.textContent = "Logout";
     } else { // If not, we prompt the user for a temporary unregistered nickname
-       let nickname = prompt("What's your nickname?");
-       btnLoginOut.textContent = "Login";
-       wt.connect(connected, nickname);
+        let nickname = prompt("What's your nickname?");
+        btnLoginOut.textContent = "Login";
+        wt.connect(connected, nickname);
     }
 });
 // This function is called when the connection to the server is established (we give it as argument to connect above).
@@ -31,13 +31,13 @@ function connected() {
 
     // These two lines puts the functions on the global window object so
     // so they can be called from the JavaScript console
-    window.send = function(msg) {
+    window.send = function (msg) {
         activeSlots[1].send(msg);
     };
-    window.login = function(username, password) {
+    window.login = function (username, password) {
         wt.login(username, password);
     }
-    window.logout = function() {
+    window.logout = function () {
         wt.logout();
     }
 };
@@ -54,7 +54,7 @@ function updateRoomList() {
 
     wt.availableRooms.forEach(room => {
         const li = document.createElement("li");
-        
+
         const nameSpan = document.createElement("span");
         nameSpan.textContent = room.name;
         li.appendChild(nameSpan);
@@ -115,7 +115,7 @@ function setupDragAndDrop() {
 }
 
 function assignRoomToSlot(roomName, slotId, slotElement) {
-    
+
     const joinedRoom = wt.join(roomName);
 
     activeSlots[slotId] = joinedRoom;
@@ -124,10 +124,13 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
 
     const header = slotElement.querySelector(".slot-header");
     header.textContent = `Room: ${joinedRoom.name}`;
-    
+
+
+    setupParticipantList(joinedRoom, slotElement);
+
 
     // Subscrbe to messagees
-        // We can subscribe to messages.
+    // We can subscribe to messages.
     // Note that the callback function has two parameters: the room and the message.
     activeSlots[slotId].onMessage((room, msg) => {
         console.log(`${room.name} - ${msg.sender}: ${msg.message}`);
@@ -136,8 +139,11 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
 
     // We can also subscribe to notifications of clients joining the room
     activeSlots[slotId].onJoin((room, nickname) => {
-       console.log(`${nickname} joined ${room.name}`);
-       displayJoinLeaveInSlot(slotId, `${nickname} joined ${room.name}`);
+        console.log(`${nickname} joined ${room.name}`);
+        displayJoinLeaveInSlot(slotId, `${nickname} joined ${room.name}`);
+        clearChatMessageArea(slotId);
+        setupParticipantList(joinedRoom, slotElement);
+
     });
 
     // ... and leaving the room
@@ -149,12 +155,54 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
     // Also to get a notification if the connection to the server is lost
     // The client will automatically try to reconnect
     activeSlots[slotId].onDisconnect((room) => {
-       console.log(`Connection to server lost`);
+        console.log(`Connection to server lost`);
     });
 
 
     updateRoomList();
+
 }
+
+function clearChatMessageArea(slotId) {
+    const slotElement = document.getElementById(`slot-${slotId}`);
+    const messagesArea = slotElement.querySelector(".slot-messages");
+    messagesArea.innerHTML = "";
+}
+
+// ----- Participation list functions ---
+
+function addParticipantToUI(nickname, listElement) {
+    const li = document.createElement("li");
+    li.textContent = nickname;
+    li.dataset.nickname = nickname;
+    listElement.appendChild(li);
+}
+
+function removeParticipantFromUi(nickname, listElement) {
+    const itemToRemove = listElement.querySelector(`li[data-nickname="${nickname}"]`);
+    if (itemToRemove) {
+        itemToRemove.remove();
+    }
+}
+
+function setupParticipantList(room, slotElement) {
+    const participantList = slotElement.querySelector(".participant-list");
+    participantList.innerHTML = "";
+    if (room.clients) {
+        room.clients.forEach(client => {
+            addParticipantToUI(client.nickname, participantList);
+        });
+    }
+
+    room.onJoin((r, nickname) => {
+        addParticipantToUI(nickname, participantList);
+    });
+
+    room.onLeave((r, nickname) => {
+        removeParticipantFromUI(nickname, participantList);
+    });
+}
+
 
 // ----- Message manipulation functions -----
 
