@@ -125,7 +125,10 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
     const header = slotElement.querySelector(".slot-header");
     header.textContent = `Room: ${joinedRoom.name}`;
 
+    const messagesArea = slotElement.querySelector(".slot-messages");
+    messagesArea.innerHTML = `<p style="margin: 5px 10px; color: gray;"><em>Joined ${joinedRoom.name}</em></p>`;
 
+    updateRoomList();
     setupParticipantList(joinedRoom, slotElement);
 
 
@@ -134,7 +137,7 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
     // Note that the callback function has two parameters: the room and the message.
     activeSlots[slotId].onMessage((room, msg) => {
         console.log(`${room.name} - ${msg.sender}: ${msg.message}`);
-        displayMessageInSlot(slotId, `${msg.sender}: ${msg.message}`);
+        appendMessageToUI(msg.sender, msg.message, slotElement);
     });
 
     // We can also subscribe to notifications of clients joining the room
@@ -159,7 +162,6 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
     });
 
 
-    updateRoomList();
 
 }
 
@@ -178,7 +180,7 @@ function addParticipantToUI(nickname, isRegistered, listElement) {
     if (isRegistered) {
         li.style.fontWeight = "bold";
         li.style.color = "green";
-    }else{
+    } else {
         li.style.fontWeight = "normal";
         li.style.color = "black";
     }
@@ -234,19 +236,30 @@ btnSend2.addEventListener("click", () => {
     }
 });
 
-function displayMessageInSlot(slotId, message) {
-    const slotElement = document.getElementById(`slot-${slotId}`);
-    const messagesArea = slotElement.querySelector(".slot-messages");
-    messagesArea.innerHTML += `<p>${message}</p>`;
-}
 function displayJoinLeaveInSlot(slotId, message) {
     const slotElement = document.getElementById(`slot-${slotId}`);
     const messagesArea = slotElement.querySelector(".slot-messages");
     messagesArea.innerHTML += `<p><em>${message}</em></p>`;
 }
 
+function appendMessageToUI(sender, messageText, slotElement) {
+    const messagesArea = slotElement.querySelector(".slot-messages");
+
+    const messageWrapper = document.createElement("p");
+    messageWrapper.style.margin = "5px 10px";
+    messageWrapper.style.wordBreak = "break-word";
+
+    const formattedText = formatMessage(messageText);
+
+    messageWrapper.innerHTML = `<strong>${sender}:</strong> ${formattedText}`;
+
+    messagesArea.appendChild(messageWrapper);
+
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+}
+
 function formatMessage(message) {
-    if(!message) return "";
+    if (!message) return "";
     let safeText = message;
     safeText = safeText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     safeText = safeText.replace(/__(.*?)__/g, '<u>$1</u>');
