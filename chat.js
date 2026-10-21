@@ -42,6 +42,22 @@ function connected() {
     }
 };
 
+
+btnLoginOut.addEventListener("click", () => {
+    if (btnLoginOut.textContent === "Logout") {
+        wt.logout();
+    } else {
+        const username = prompt("Enter your registered nickname:");
+        if (username) {
+            const password = prompt("Enter your password:");
+            if (password) {
+                wt.login(username, password);
+            }
+        }
+    }
+});
+
+
 const activeSlots = {
     1: null,
     2: null
