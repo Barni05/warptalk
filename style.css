@@ -99,6 +99,11 @@ body {
     border-bottom: 1px solid #eee;
 }
 
+.registered-user {
+    font-weight: bold;
+    color: green;
+}
+
 .slot-header {
     height: 50px;
     border-bottom: 1px solid black;

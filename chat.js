@@ -171,10 +171,17 @@ function clearChatMessageArea(slotId) {
 
 // ----- Participation list functions ---
 
-function addParticipantToUI(nickname, listElement) {
+function addParticipantToUI(nickname, isRegistered, listElement) {
     const li = document.createElement("li");
     li.textContent = nickname;
     li.dataset.nickname = nickname;
+    if (isRegistered) {
+        li.style.fontWeight = "bold";
+        li.style.color = "green";
+    }else{
+        li.style.fontWeight = "normal";
+        li.style.color = "black";
+    }
     listElement.appendChild(li);
 }
 
@@ -190,16 +197,18 @@ function setupParticipantList(room, slotElement) {
     participantList.innerHTML = "";
     if (room.clients) {
         room.clients.forEach(client => {
-            addParticipantToUI(client.nickname, participantList);
+            addParticipantToUI(client.nickname, client.registered, participantList);
         });
     }
 
     room.onJoin((r, nickname) => {
-        addParticipantToUI(nickname, participantList);
+        const newlyJoinedClient = r.clients.find(c => c.nickname === nickname);
+        const isRegistered = newlyJoinedClient ? newlyJoinedClient.registered : false
+        addParticipantToUI(nickname, isRegistered, participantList);
     });
 
     room.onLeave((r, nickname) => {
-        removeParticipantFromUI(nickname, participantList);
+        removeParticipantFromUi(nickname, participantList);
     });
 }
 
@@ -234,6 +243,15 @@ function displayJoinLeaveInSlot(slotId, message) {
     const slotElement = document.getElementById(`slot-${slotId}`);
     const messagesArea = slotElement.querySelector(".slot-messages");
     messagesArea.innerHTML += `<p><em>${message}</em></p>`;
+}
+
+function formatMessage(message) {
+    if(!message) return "";
+    let safeText = message;
+    safeText = safeText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    safeText = safeText.replace(/__(.*?)__/g, '<u>$1</u>');
+    safeText = safeText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    return safeText;
 }
 
 setupDragAndDrop();
