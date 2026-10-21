@@ -136,8 +136,6 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
 
     activeSlots[slotId] = joinedRoom;
 
-    console.log(`Assigned ${joinedRoom.name} to Slot ${slotId}`);
-
     const header = slotElement.querySelector(".slot-header");
     header.textContent = `Room: ${joinedRoom.name}`;
 
@@ -190,6 +188,9 @@ function clearChatMessageArea(slotId) {
 // ----- Participation list functions ---
 
 function addParticipantToUI(nickname, isRegistered, listElement) {
+    const existing = Array.from(listElement.children).find(li => li.dataset.nickname === nickname);
+    if (existing) return;
+
     const li = document.createElement("li");
     li.textContent = nickname;
     li.dataset.nickname = nickname;
