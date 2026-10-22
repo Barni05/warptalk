@@ -1,15 +1,14 @@
 body {
     margin: auto;
-    border: 2px solid #4b1e3d;
     font-family: space-mono, monospace;
     background-color: #f7f06c;
     text-align: center;
     font-size: 14px;
     color: #4b1e3d;
 }
+
 .room-section h2, .dms-section h2 {
     list-style-type: none;
-    margin: 4px;
     padding: 2px;
 }
 
@@ -17,22 +16,62 @@ body {
     font-family: "Space Mono", monospace;
     border: 2px solid #4b1e3d;
     font-size: 10px;
+    background-color: #f7f06c;
+    border-radius: 12px;
+}
+
+h2, h3, .slot-messages, .slot-input-area, .slot-media-links, .slot-participants {
+    margin: 0;
+    padding: 5px;
+    font-size: 14px;
+    text-align: center;
+    background-color: #f7f06c;
+    border: 2px solid #4b1e3d;
+    border-radius: 8px;
+}
+
+.slot-header{
+    text-align: middle;
+    background-color: #4b1e3d;
+    color: #f7f06c;
+    border: 8px solid #80ba42;
+    border-radius: 8px;
+}
+
+.rooms-section h2 {
+    margin-bottom: 2px;
+}
+
+.rooms-section,
+.dms-section,
+.slot-messages,
+.slot-input-area,
+.slot-media-links,
+.slot-participants {
     background-color: #80ba42;
-    border-radius: 4px;
+    border: 2px solid #4b1e3d;
+    border-radius: 8px;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.slot-main{
+    gap: 8px;
 }
 
 .app-container {
     display: flex;
     height: 100vh;
     width: 100vw;
-    border: 2px solid #4b1e3d;
+    gap: 8px;
 }
 
 .sidebar {
     width: 250px;
     display: flex;
     flex-direction: column;
-    border-right: 2px solid #4b1e3d;
+    padding: 8px;
+    gap: 8px;
 }
 
 .rooms-section {
@@ -45,8 +84,6 @@ body {
     flex: 2;
     overflow-y: auto;
 }
-
-
 
 .slot.drag-over {
     background-color: #8f9396;
@@ -80,8 +117,8 @@ body {
 .slot {
     flex: 2;
     display: flex;
-    flex-direction: row;
-    border-right: 2px solid #4b1e3d;
+    gap: 16px;
+    padding: 8px;
 }
 
 .slot-main {
@@ -92,18 +129,9 @@ body {
 
 .slot-participants {
     width: 150px;
-    border-left: 2px solid #4b1e3d;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-}
-
-.slot-participants h3 {
-    margin: 0;
-    padding: 10px 5px;
-    font-size: 14px;
-    text-align: center;
-    border-bottom: 2px solid #4b1e3d;
 }
 
 .participant-list {
@@ -115,7 +143,6 @@ body {
 .participant-list li {
     padding: 5px 10px;
     font-size: 14px;
-    border-bottom: 2px solid #eee;
 }
 
 .registered-user {
@@ -125,21 +152,31 @@ body {
 
 .slot-header {
     height: 50px;
-    border-bottom: 2px solid #4b1e3d;
 }
 
 .slot-messages {
     flex: 1;
     overflow-y: auto;
-    border-bottom: 2px solid #4b1e3d;
 }
 
 .slot-media-links {
     height: 150px;
-    border-bottom: 2px solid #4b1e3d;
 }
 
 .slot-input-area {
-    height: 60px;
-    border-bottom: 2px solid #4b1e3d;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 8px;
+    row-gap: 2px;
+    height: 70px;
+}
+
+.slot-input-label {
+    flex-basis: 100%;
+}
+
+.slot-input-area input {
+    flex: 1;
+    min-width: 0;
 }
