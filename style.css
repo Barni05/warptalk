@@ -1,29 +1,48 @@
 body {
-    margin: 0;
-    font-family: sans-serif;
+    margin: auto;
+    border: 2px solid #4b1e3d;
+    font-family: space-mono, monospace;
+    background-color: #f7f06c;
+    text-align: center;
+    font-size: 14px;
+    color: #4b1e3d;
+}
+.room-section h2, .dms-section h2 {
+    list-style-type: none;
+    margin: 4px;
+    padding: 2px;
+}
+
+.login-out-btn, .submit-btn {
+    font-family: "Space Mono", monospace;
+    border: 2px solid #4b1e3d;
+    font-size: 10px;
+    background-color: #80ba42;
+    border-radius: 4px;
 }
 
 .app-container {
     display: flex;
     height: 100vh;
     width: 100vw;
+    border: 2px solid #4b1e3d;
 }
 
 .sidebar {
     width: 250px;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid black;
+    border-right: 2px solid #4b1e3d;
 }
 
 .rooms-section {
     flex: 1;
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid #4b1e3d;
     overflow-y: auto;
 }
 
 .dms-section {
-    flex: 1;
+    flex: 2;
     overflow-y: auto;
 }
 
@@ -59,21 +78,21 @@ body {
 }
 
 .slot {
-    flex: 1;
+    flex: 2;
     display: flex;
     flex-direction: row;
-    border-right: 1px solid black;
+    border-right: 2px solid #4b1e3d;
 }
 
 .slot-main {
-    flex: 1;
+    flex: 2;
     display: flex;
     flex-direction: column;
 }
 
 .slot-participants {
     width: 150px;
-    border-left: 1px solid black;
+    border-left: 2px solid #4b1e3d;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -84,19 +103,19 @@ body {
     padding: 10px 5px;
     font-size: 14px;
     text-align: center;
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid #4b1e3d;
 }
 
 .participant-list {
     list-style-type: none;
-    margin: 0;
-    padding: 0;
+    margin: 5px;
+    padding: 5px;
 }
 
 .participant-list li {
     padding: 5px 10px;
     font-size: 14px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 2px solid #eee;
 }
 
 .registered-user {
@@ -106,22 +125,21 @@ body {
 
 .slot-header {
     height: 50px;
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid #4b1e3d;
 }
 
 .slot-messages {
     flex: 1;
     overflow-y: auto;
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid #4b1e3d;
 }
 
 .slot-media-links {
     height: 150px;
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid #4b1e3d;
 }
 
 .slot-input-area {
     height: 60px;
-    border-bottom: 1px solid black;
-
+    border-bottom: 2px solid #4b1e3d;
 }
