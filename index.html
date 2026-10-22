@@ -1,61 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <title>WarpTalk Skeleton</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://warp.cs.au.dk/libs/warptalk.js" type="application/javascript"></script>
+	<head>
+		<meta charset="UTF-8">
+		<title>WarpTalk Skeleton</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="style.css">
+		<script src="https://warp.cs.au.dk/libs/warptalk.js" type="application/javascript"></script>
+	</head>
 
-</head>
+	<body>
 
-<body>
+		<div class="app-container">
+			<div class="sidebar">
+				<div class="rooms-section">
+					<h2>Rooms</h2>
+					<button class="login-out-btn">login</button>
+					<ul class="room-list"></ul>
+				</div>
+				<div class="dms-section">
+					<h2>Direct Messages</h2>
+				</div>
+			</div>
 
-    <div class="app-container">
-        <div class="sidebar">
-            <div class="rooms-section">
-                <h3>Rooms</h3>
-                <button class="login-out-btn">Login</button>
-                <ul class="room-list"></ul>
-            </div>
-            <div class="dms-section">
-                <h3>Direct Messages</h3>
-            </div>
-        </div>
+			<div class="slot" id="slot-1">
+				<div class="slot-main">
 
-        <div class="slot" id="slot-1">
-            <div class="slot-main">
+					<div class="slot-header">Room 1 Header / Details</div>
+					<div class="slot-messages">Chat Messages Area</div>
+					<div class="slot-input-area">Message Input Bar
+						<input type="text" class="slot1-input">
+						<button id="slot1-submit" class="submit-btn">send</button></div>
+					<div class="slot-media-links">Media & Links View</div>
+				</div>
+				<div class="slot-participants">
+					<h3>Participants</h3>
+					<ul class="participant-list"></ul>
+				</div>
+			</div>
 
-                <div class="slot-header">Room 1 Header / Details</div>
-                <div class="slot-messages">Chat Messages Area</div>
-                <div class="slot-input-area">Message Input Bar
-                    <input type="text" class="slot1-input">
-                    <button id="slot1-submit" class="submit-btn">Send</button>
-                </div>
-                <div class="slot-media-links">Media & Links View</div>
-            </div>
-            <div class="slot-participants">
-                <h3>Participants</h3>
-                <ul class="participant-list"></ul>
-            </div>
-        </div>
-
-        <div class="slot" id="slot-2">
-            <div class="slot-main">
-                <div class="slot-header">Room 2 Header / Details</div>
-                <div class="slot-messages">Chat Messages Area</div>
-                <div class="slot-input-area">Message Input Bar
-                    <input type="text" class="slot2-input">
-                    <button id="slot2-submit" class="submit-btn">Send</button>
-                </div>
-                <div class="slot-media-links">Media & Links View</div>
-            </div>
-            <div class="slot-participants">
-                <h3>Participants</h3>
-                <ul class="participant-list"></ul>
-            </div>
-        </div>
-        <script src="chat.js"></script>
-</body>
-
+			<div class="slot" id="slot-2">
+				<div class="slot-main">
+					<div class="slot-header">Room 2 Header / Details</div>
+					<div class="slot-messages">Chat Messages Area</div>
+					<div class="slot-input-area">Message Input Bar
+						<input type="text" class="slot2-input">
+						<button id="slot2-submit" class="submit-btn">send</button></div>
+					<div class="slot-media-links">Media & Links View</div>
+				</div>
+				<div class="slot-participants">
+					<h3>Participants</h3>
+					<ul class="participant-list"></ul>
+				</div>
+			</div>
+			<script src="chat.js"></script>
+		</div>
+	</body>
 </html>
