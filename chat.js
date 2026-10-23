@@ -134,6 +134,20 @@ const initializedRooms = new Set();
 
 function assignRoomToSlot(roomName, slotId, slotElement) {
     clearChatMessageArea(slotId);
+
+    // Leave the previous room
+    const oldRoom = activeSlots[slotId];
+    if(oldRoom && oldRoom.name !== roomName) {
+
+        //check if the other slot has the same room
+        const otherSlotId = slotId === 1 ? 2 : 1;
+        const roomInOtherSlot = activeSlots[otherSlotId];
+        if (roomInOtherSlot && roomInOtherSlot.name === oldRoom.name) {
+            wt.leave(oldRoom.name);
+            initializedRooms.delete(oldRoom.name);
+        }
+    }
+
     const joinedRoom = wt.join(roomName);
 
     activeSlots[slotId] = joinedRoom;
@@ -146,7 +160,7 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
 
     updateRoomList();
 
-
+    // Only subscribe to events if we havent done it
     if (!initializedRooms.has(roomName)) {
         initializedRooms.add(roomName);
 
