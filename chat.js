@@ -137,12 +137,13 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
 
     // Leave the previous room
     const oldRoom = activeSlots[slotId];
+    console.log(`Assigning room ${roomName} to slot ${slotId}. Old room: ${oldRoom ? oldRoom.name : "none"}`);
     if(oldRoom && oldRoom.name !== roomName) {
-
+        console.log(`Leaving old room ${oldRoom.name} from slot ${slotId}`);
         //check if the other slot has the same room
         const otherSlotId = slotId === 1 ? 2 : 1;
         const roomInOtherSlot = activeSlots[otherSlotId];
-        if (roomInOtherSlot && roomInOtherSlot.name === oldRoom.name) {
+        if (!roomInOtherSlot || (roomInOtherSlot.name !== oldRoom.name)) {
             wt.leave(oldRoom.name);
             initializedRooms.delete(oldRoom.name);
         }
