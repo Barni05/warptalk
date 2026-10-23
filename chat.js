@@ -130,6 +130,8 @@ function setupDragAndDrop() {
     });
 }
 
+const initializedRooms = new Set();
+
 function assignRoomToSlot(roomName, slotId, slotElement) {
 
     const joinedRoom = wt.join(roomName);
@@ -140,44 +142,64 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
     header.textContent = `Room: ${joinedRoom.name}`;
 
     const messagesArea = slotElement.querySelector(".slot-messages");
-    messagesArea.innerHTML = `<p style="margin: 5px 10px; color: gray;"><em>Joined ${joinedRoom.name}</em></p>`;
+    //messagesArea.innerHTML = `<p style="margin: 5px 10px; color: gray;"><em>Joined ${joinedRoom.name}</em></p>`;
 
     updateRoomList();
-    setupParticipantList(joinedRoom, slotElement);
 
 
-    // Subscrbe to messagees
-    // We can subscribe to messages.
-    // Note that the callback function has two parameters: the room and the message.
-    activeSlots[slotId].onMessage((room, msg) => {
-        console.log(`${room.name} - ${msg.sender}: ${msg.message}`);
-        appendMessageToUI(msg.sender, msg.message, slotElement);
-    });
+    if (!initializedRooms.has(roomName)) {
+        initializedRooms.add(roomName);
 
-    // We can also subscribe to notifications of clients joining the room
-    activeSlots[slotId].onJoin((room, nickname) => {
-        console.log(`${nickname} joined ${room.name}`);
-        displayJoinLeaveInSlot(slotId, `${nickname} joined ${room.name}`);
-        clearChatMessageArea(slotId);
-        setupParticipantList(joinedRoom, slotElement);
+        joinedRoom.onMessage((room, msg) => {
+            if (activeSlots[1] && activeSlots[1].name === room.name) {
+                appendMessageToUI(msg.sender, msg.message, document.getElementById("slot-1"));
+            }
+            if (activeSlots[2] && activeSlots[2].name === room.name) {
+                appendMessageToUI(msg.sender, msg.message, document.getElementById("slot-2"));
+            }
+        });
 
-    });
+        joinedRoom.onJoin((room, nickname) => {
+            console.log(`${nickname} joined ${room.name}`);
 
-    // ... and leaving the room
-    activeSlots[slotId].onLeave((room, nickname) => {
-        console.log(`${nickname} left ${room.name}`);
-        displayJoinLeaveInSlot(slotId, `${nickname} left ${room.name}`);
-    });
+            const newlyJoinedClient = room.clients.find(c => c.nickname === nickname);
+            const isRegistered = newlyJoinedClient ? newlyJoinedClient.registered : false;
 
-    // Also to get a notification if the connection to the server is lost
-    // The client will automatically try to reconnect
-    activeSlots[slotId].onDisconnect((room) => {
-        console.log(`Connection to server lost`);
-    });
+            if (activeSlots[1] && activeSlots[1].name === room.name) {
+                clearChatMessageArea(1);
+                displayJoinLeaveInSlot(1, `${nickname} joined ${room.name}`);
+                const pList = document.getElementById("slot-1").querySelector(".participant-list");
+                setupParticipantList(joinedRoom, slotElement);
 
+            }
+            if (activeSlots[2] && activeSlots[2].name === room.name) {
+                clearChatMessageArea(2);
+                displayJoinLeaveInSlot(2, `${nickname} joined ${room.name}`);
+                const pList = document.getElementById("slot-2").querySelector(".participant-list");
+                setupParticipantList(joinedRoom, slotElement);
 
+            }
+        });
 
+        joinedRoom.onLeave((room, nickname) => {
+            console.log(`${nickname} left ${room.name}`);
+
+            if (activeSlots[1] && activeSlots[1].name === room.name) {
+                clearChatMessageArea(1);
+                displayJoinLeaveInSlot(1, `${nickname} left ${room.name}`);
+                const pList = document.getElementById("slot-1").querySelector(".participant-list");
+                removeParticipantFromUi(nickname, pList);
+            }
+            if (activeSlots[2] && activeSlots[2].name === room.name) {
+                clearChatMessageArea(2);
+                displayJoinLeaveInSlot(2, `${nickname} left ${room.name}`);
+                const pList = document.getElementById("slot-2").querySelector(".participant-list");
+                removeParticipantFromUi(nickname, pList);
+            }
+        });
+    }
 }
+
 
 function clearChatMessageArea(slotId) {
     const slotElement = document.getElementById(`slot-${slotId}`);
@@ -220,15 +242,6 @@ function setupParticipantList(room, slotElement) {
         });
     }
 
-    room.onJoin((r, nickname) => {
-        const newlyJoinedClient = r.clients.find(c => c.nickname === nickname);
-        const isRegistered = newlyJoinedClient ? newlyJoinedClient.registered : false
-        addParticipantToUI(nickname, isRegistered, participantList);
-    });
-
-    room.onLeave((r, nickname) => {
-        removeParticipantFromUi(nickname, participantList);
-    });
 }
 
 
