@@ -158,7 +158,7 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
 
     activeSlots[slotId] = joinedRoom;
 
-    const header = slotElement.querySelector(".slot-header");
+    const header = slotElement.querySelector(".slot-header-inner");
     header.textContent = `Room: ${joinedRoom.name}`;
 
     const messagesArea = slotElement.querySelector(".slot-messages");
