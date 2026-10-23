@@ -133,7 +133,7 @@ function setupDragAndDrop() {
 const initializedRooms = new Set();
 
 function assignRoomToSlot(roomName, slotId, slotElement) {
-
+    clearChatMessageArea(slotId);
     const joinedRoom = wt.join(roomName);
 
     activeSlots[slotId] = joinedRoom;
@@ -166,14 +166,12 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
             const isRegistered = newlyJoinedClient ? newlyJoinedClient.registered : false;
 
             if (activeSlots[1] && activeSlots[1].name === room.name) {
-                clearChatMessageArea(1);
                 displayJoinLeaveInSlot(1, `${nickname} joined ${room.name}`);
                 const pList = document.getElementById("slot-1").querySelector(".participant-list");
                 setupParticipantList(joinedRoom, slotElement);
 
             }
             if (activeSlots[2] && activeSlots[2].name === room.name) {
-                clearChatMessageArea(2);
                 displayJoinLeaveInSlot(2, `${nickname} joined ${room.name}`);
                 const pList = document.getElementById("slot-2").querySelector(".participant-list");
                 setupParticipantList(joinedRoom, slotElement);
@@ -185,13 +183,11 @@ function assignRoomToSlot(roomName, slotId, slotElement) {
             console.log(`${nickname} left ${room.name}`);
 
             if (activeSlots[1] && activeSlots[1].name === room.name) {
-                clearChatMessageArea(1);
                 displayJoinLeaveInSlot(1, `${nickname} left ${room.name}`);
                 const pList = document.getElementById("slot-1").querySelector(".participant-list");
                 removeParticipantFromUi(nickname, pList);
             }
             if (activeSlots[2] && activeSlots[2].name === room.name) {
-                clearChatMessageArea(2);
                 displayJoinLeaveInSlot(2, `${nickname} left ${room.name}`);
                 const pList = document.getElementById("slot-2").querySelector(".participant-list");
                 removeParticipantFromUi(nickname, pList);
