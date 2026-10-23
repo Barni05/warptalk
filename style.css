@@ -5,6 +5,7 @@ body {
     text-align: center;
     font-size: 14px;
     color: #4b1e3d;
+    cursor: url("cursors/hand-point-cursor.png") 4 2, pointer;
 }
 
 .room-section h2, .dms-section h2 {
@@ -18,6 +19,7 @@ body {
     font-size: 10px;
     background-color: #f7f06c;
     border-radius: 12px;
+    cursor: url("cursors/hand-point-cursor.png") 4 2, pointer;
 }
 
 h2, h3, .slot-messages, .slot-input-area, .slot-media-links, .slot-participants {
@@ -31,7 +33,9 @@ h2, h3, .slot-messages, .slot-input-area, .slot-media-links, .slot-participants 
 }
 
 .slot-header{
-    text-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #4b1e3d;
     color: #f7f06c;
     border: 8px solid #80ba42;
@@ -91,7 +95,7 @@ h2, h3, .slot-messages, .slot-input-area, .slot-media-links, .slot-participants 
 }
 
 .room-list li {
-    cursor: grab;
+    cursor: url("cursors/palm-cursor.png") 16 16, grab;
     display: flex;
     justify-content: space-between;
     padding: 5px;
@@ -99,12 +103,13 @@ h2, h3, .slot-messages, .slot-input-area, .slot-media-links, .slot-participants 
 }
 
 .room-list li:active {
-    cursor: grabbing;
+    cursor: url("cursors/drag-cursor.png") 16 16, grabbing;
 }
 
 .slot-indicator {
-    background-color: #333;
-    color: white;
+    background-color: #f7f06c;
+    color: #4b1e3d;
+    border:2px solid #4b1e3d;
     border-radius: 50%;
     width: 20px;
     height: 20px;
@@ -147,7 +152,7 @@ h2, h3, .slot-messages, .slot-input-area, .slot-media-links, .slot-participants 
 
 .registered-user {
     font-weight: bold;
-    color: green;
+    color: #6c425f;
 }
 
 .slot-header {
