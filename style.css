@@ -33,12 +33,24 @@ h2, h3, .slot-messages, .slot-input-area, .slot-media-links, .slot-participants 
 }
 
 .slot-header{
+    container-type: size;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #4b1e3d;
+    background-color: #80ba42;
     color: #f7f06c;
-    border: 8px solid #80ba42;
+    border: 2px solid #4b1e3d;
+    border-radius: 8px;
+    
+}
+.slot-header-inner{
+    background-color: #4b1e3d;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width:95cqw;
+    height: 80cqh;
+    color: #f7f06c;
     border-radius: 8px;
 }
 
@@ -124,12 +136,15 @@ h2, h3, .slot-messages, .slot-input-area, .slot-media-links, .slot-participants 
     display: flex;
     gap: 16px;
     padding: 8px;
+    border-left: 1px solid #4b1e3d;
+    padding-right: 1px;
 }
 
 .slot-main {
     flex: 2;
     display: flex;
     flex-direction: column;
+
 }
 
 .slot-participants {
@@ -157,6 +172,7 @@ h2, h3, .slot-messages, .slot-input-area, .slot-media-links, .slot-participants 
 
 .slot-header {
     height: 50px;
+    font-weight: bold;
 }
 
 .slot-messages {
