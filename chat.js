@@ -16,6 +16,8 @@ wt.isLoggedIn(function (isLoggedIn) {
         let nickname = prompt("What's your nickname?");
         btnLoginOut.textContent = "Login";
         wt.connect(connected, nickname);
+        const usernameDisplay = document.getElementById("username");
+        usernameDisplay.textContent = `Logged in as: ${nickname} (unregistered)`;
     }
 });
 // This function is called when the connection to the server is established (we give it as argument to connect above).
@@ -34,8 +36,11 @@ function connected() {
     window.send = function (msg) {
         activeSlots[1].send(msg);
     };
-    window.login = function (username, password) {
-        wt.login(username, password);
+    window.login = async function (username, password) {
+        await wt.login(username, password);
+        const usernameDisplay = document.getElementById("username");
+        usernameDisplay.textContent = `Logged in as: ${username}`;
+        btnLoginOut.textContent = "Logout";
     }
     window.logout = function () {
         wt.logout();
